@@ -1,0 +1,18 @@
+sudo: required
+services:
+  - docker
+before_install:
+  - docker build -t ya2eo/nodejs_react -f Dockerfile.dev .
+script:
+  - docker run -e CI=true ya2eo/nodejs_react npm run test
+deploy:
+  provider: elasticbeanstalk
+  region: eu-north-1
+  app: nodejs_react
+  env: Nodejsreact-env
+  bucket_name: elasticbeanstalk-eu-north-1-293246570391
+  bucket_path: nodejs_react
+  on:
+    branch: main
+    access_key_id: $AWS_ACCESS_KEY_ID
+    secret_access_key: $AWS_SECRET_ACCESS_KEY
